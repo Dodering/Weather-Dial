@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Smartwatch Weather</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #2a2a2a;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        #watch {
+            background-color: #383838;
+            border-radius: 50%;
+            width: 300px;
+            height: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+            position: relative;
+        }
+
+        #watch-face {
+            background-color: #2e2e2e;
+            border-radius: 50%;
+            width: 280px;
+            height: 280px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        #time {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+        }
+
+        #seconds {
+            font-size: 24px;
+            margin-left: 5px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        #date {
+            font-size: 18px;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        #weather-info {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        #temperature {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #FFD700; /* Jaune */
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        #conditions {
+            font-size: 18px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        #temperature-bar {
+            width: 70%;
+            height: 8px;
+            background: linear-gradient(to right, #FFD700, #FFD700, transparent); /* Effet de lumière */
+            border-radius: 5px;
+            margin-top: 15px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        #power-button {
+            position: absolute;
+            top: 50%;
+            right: 20px; /* Légèrement déplacé vers la gauche */
+            transform: translate(0, -50%);
+            background-color: #383838; /* Couleur du fond de la montre */
+            color: #00ff2a;
+            width: 30px;
+            height: 30px;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        #power-button.off {
+            background-color: #383838; /* Même couleur que le fond de la montre */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            color: #ff1414;
+        }
+
+        #power-button:hover {
+            background-color: #383838; /* Vert plus clair au survol */
+            color: #ff1414;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="watch">
+        <div id="watch-face">
+            <div id="time" class="content">
+                <span id="hours"></span>
+                <span id="minutes"></span>
+                <span id="seconds"></span>
+            </div>
+            <div id="date" class="content"></div>
+            <div id="weather-info" class="content">
+                <div id="temperature">25°C</div>
+                <div id="conditions">☀️ Sunny</div>
+                <div id="temperature-bar"></div>
+            </div>
+        </div>
+        <button id="power-button" onclick="togglePower()">•</button>
+    </div>
+
+    <script>
+        function updateTimeAndDate() {
+            const now = new Date();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const seconds = now.getSeconds().toString().padStart(2, '0');
+            const month = (now.getMonth() + 1).toString().padStart(2, '0');
+            const day = now.getDate().toString().padStart(2, '0');
+            const year = now.getFullYear();
+
+            document.getElementById('hours').textContent = `${hours}:`;
+            document.getElementById('minutes').textContent = `${minutes}:`;
+            document.getElementById('seconds').textContent = seconds;
+            document.getElementById('date').textContent = `${year}-${month}-${day}`;
+        }
+
+        function togglePower() {
+            const powerButton = document.getElementById('power-button');
+            const isOn = !powerButton.classList.contains('off');
+            const contentElements = document.querySelectorAll('.content');
+
+            if (isOn) {
+                // Éteindre la montre
+                powerButton.classList.add('off');
+                contentElements.forEach(element => element.classList.add('hidden'));
+            } else {
+                // Allumer la montre
+                powerButton.classList.remove('off');
+                contentElements.forEach(element => element.classList.remove('hidden'));
+            }
+        }
+
+        setInterval(updateTimeAndDate, 1000); // Mettre à jour chaque seconde
+        updateTimeAndDate(); // Mettre à jour immédiatement lors du chargement de la page
+    </script>
+</body>
+</html>
